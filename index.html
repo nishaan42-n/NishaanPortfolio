@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nishaan Chakraborty | Video Editor</title>
+
+    <meta name="description"
+          content="Nishaan Chakraborty — Video Editor, Visual Storyteller and Creative Editor.">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #070707;
+            --bg-soft: #0d0d0d;
+            --card: #111111;
+            --text: #f5f5f5;
+            --muted: #929292;
+            --line: rgba(255,255,255,.10);
+            --accent: #c8ff35;
+            --max: 1400px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Inter", sans-serif;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .035;
+            z-index: 9999;
+            background-image:
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        img,
+        video {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            width: min(var(--max), calc(100% - 60px));
+            margin: auto;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(1200px, calc(100% - 40px));
+            z-index: 1000;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 15px 20px;
+
+            border: 1px solid transparent;
+            border-radius: 100px;
+
+            transition: .4s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10,10,10,.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-color: var(--line);
+        }
+
+        .logo {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: .08em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #aaa;
+            font-size: 12px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            transition: .3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .menu-btn {
+            display: none;
+            background: none;
+            border: 0;
+            color: white;
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: rgba(200,255,53,.06);
+            filter: blur(120px);
+            top: -300px;
+            right: -200px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding-top: 100px;
+        }
+
+        .hero-small {
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: .22em;
+            font-size: 12px;
+            margin-bottom: 25px;
+
+            opacity: 0;
+            transform: translateY(20px);
+            animation: reveal .8s .2s forwards;
+        }
+
+        .hero-title {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(60px, 10vw, 160px);
+            line-height: .85;
+            letter-spacing: -.07em;
+            font-weight: 700;
+            text-transform: uppercase;
+            max-width: 1200px;
+
+            opacity: 0;
+            transform: translateY(50px);
+            animation: reveal 1s .35s forwards;
+        }
+
+        .hero-title span {
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,.35);
+        }
+
+        .hero-bottom {
+            margin-top: 50px;
+
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 40px;
+
+            opacity: 0;
+            transform: translateY(30px);
+            animation: reveal .8s .7s forwards;
+        }
+
+        .hero-description {
+            max-width: 440px;
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 7%;
+            bottom: 0;
+            width: min(430px, 38vw);
+            z-index: 1;
+            opacity: .75;
+            filter: grayscale(100%);
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            color: #777;
+            font-size: 10px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+
+            animation: float 2s infinite;
+        }
+
+        /* =========================
+           SECTIONS
+        ========================= */
+
+        section {
+            padding: 140px 0;
+        }
+
+        .section-label {
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: .2em;
+            font-size: 11px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(42px, 6vw, 90px);
+            line-height: .95;
+            letter-spacing: -.05em;
+            text-transform: uppercase;
+            margin-bottom: 60px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: 1s cubic-bezier(.16,1,.3,1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================
+           ABOUT
+        ========================= */
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .about-text {
+            color: #aaa;
+            font-size: 18px;
+            line-height: 1.9;
+            max-width: 600px;
+        }
+
+        .about-text strong {
+            color: white;
+        }
+
+        .about-image {
+            position: relative;
+            aspect-ratio: 4 / 5;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: transform 1s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* =========================
+           PROJECTS
+        ========================= */
+
+        .filter {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .filter button {
+            border: 1px solid var(--line);
+            background: transparent;
+            color: #888;
+            padding: 10px 18px;
+            border-radius: 100px;
+            cursor: pointer;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            transition: .3s;
+        }
+
+        .filter button:hover,
+        .filter button.active {
+            background: white;
+            color: black;
+            border-color: white;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .project {
+            position: relative;
+            overflow: hidden;
+            background: var(--card);
+            cursor: pointer;
+        }
+
+        .project.featured {
+            grid-column: span 2;
+        }
+
+        .project-media {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+        }
+
+        .project video,
+        .project img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .8s cubic-bezier(.16,1,.3,1);
+        }
+
+        .project:hover video,
+        .project:hover img {
+            transform: scale(1.04);
+        }
+
+        .project-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: rgba(0,0,0,.25);
+            transition: .4s;
+        }
+
+        .project:hover .project-overlay {
+            background: rgba(0,0,0,.45);
+        }
+
+        .play {
+            width: 70px;
+            height: 70px;
+            border: 1px solid rgba(255,255,255,.5);
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: white;
+            backdrop-filter: blur(8px);
+
+            transform: scale(.8);
+            transition: .4s;
+        }
+
+        .project:hover .play {
+            transform: scale(1);
+            background: rgba(255,255,255,.1);
+        }
+
+        .project-info {
+            padding: 20px 5px;
+        }
+
+        .project-info h3 {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        /* =========================
+           FEATURED
+        ========================= */
+
+        .featured-work {
+            background: #0b0b0b;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .featured-video {
+            aspect-ratio: 16 / 10;
+            background: black;
+            overflow: hidden;
+        }
+
+        .featured-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .featured-copy h3 {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(35px, 4vw, 60px);
+            line-height: 1;
+            margin-bottom: 25px;
+        }
+
+        .featured-copy p {
+            color: #888;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .outline-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+
+            border: 1px solid var(--line);
+            padding: 15px 22px;
+            border-radius: 100px;
+
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+
+            transition: .3s;
+        }
+
+        .outline-btn:hover {
+            background: white;
+            color: black;
+        }
+
+        /* =========================
+           SKILLS
+        ========================= */
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--line);
+            border: 1px solid var(--line);
+        }
+
+        .skill {
+            background: var(--bg);
+            padding: 40px;
+            min-height: 220px;
+            transition: .4s;
+        }
+
+        .skill:hover {
+            background: #111;
+        }
+
+        .skill-number {
+            color: var(--accent);
+            font-size: 11px;
+            margin-bottom: 60px;
+        }
+
+        .skill h3 {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .skill p {
+            color: #777;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           SOFTWARE
+        ========================= */
+
+        .software-list {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .software {
+            border: 1px solid var(--line);
+            min-height: 150px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+            padding: 20px;
+
+            transition: .4s;
+        }
+
+        .software:hover {
+            border-color: rgba(200,255,53,.5);
+            transform: translateY(-5px);
+        }
+
+        .software span {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 15px;
+        }
+
+        /* =========================
+           CONTACT
+        ========================= */
+
+        .contact {
+            text-align: center;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-title {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(60px, 11vw, 170px);
+            line-height: .82;
+            letter-spacing: -.07em;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+        }
+
+        .contact-subtitle {
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        .contact-button {
+            display: inline-flex;
+            padding: 18px 30px;
+            background: white;
+            color: black;
+            border-radius: 100px;
+
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: .12em;
+
+            transition: .3s;
+        }
+
+        .contact-button:hover {
+            transform: scale(1.05);
+            background: var(--accent);
+        }
+
+        .socials {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-top: 70px;
+        }
+
+        .socials a {
+            color: #777;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            transition: .3s;
+        }
+
+        .socials a:hover {
+            color: white;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 30px 0;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            color: #666;
+            font-size: 11px;
+        }
+
+        /* =========================
+           VIDEO MODAL
+        ========================= */
+
+        .video-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+
+            background: rgba(0,0,0,.92);
+            backdrop-filter: blur(20px);
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: min(1100px, 100%);
+            position: relative;
+        }
+
+        .modal-content video {
+            width: 100%;
+            max-height: 80vh;
+            background: black;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -50px;
+            right: 0;
+
+            background: none;
+            border: 0;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            margin-top: 15px;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 22px;
+        }
+
+        /* =========================
+           ANIMATIONS
+        ========================= */
+
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(-50%, 0);
+            }
+
+            50% {
+                transform: translate(-50%, 8px);
+            }
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .container {
+                width: min(100% - 35px, var(--max));
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .hero-image {
+                width: 65vw;
+                right: -5%;
+                opacity: .35;
+            }
+
+            .hero-title {
+                font-size: clamp(55px, 15vw, 110px);
+            }
+
+            .hero-bottom {
+                display: block;
+            }
+
+            .about-grid,
+            .featured-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .projects {
+                grid-template-columns: 1fr;
+            }
+
+            .project.featured {
+                grid-column: span 1;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .software-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            section {
+                padding: 100px 0;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .navbar {
+                width: calc(100% - 25px);
+                top: 12px;
+            }
+
+            .hero {
+                min-height: 90vh;
+            }
+
+            .hero-image {
+                width: 85vw;
+            }
+
+            .software-list {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+            }
+
+            .contact {
+                min-height: 70vh;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav class="navbar" id="navbar">
+
+    <a href="#home" class="logo">
+        NISHAAN CHAKRABORTY
+    </a>
+
+    <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <button class="menu-btn" id="menuBtn">
+        ☰
+    </button>
+
+</nav>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero" id="home">
+
+    <div class="container hero-content">
+
+        <div class="hero-small">
+            Video Editor / Visual Storyteller
+        </div>
+
+        <h1 class="hero-title">
+            NISHAAN<br>
+            <span>CHAKRABORTY</span>
+        </h1>
+
+        <div class="hero-bottom">
+
+            <p class="hero-description">
+                I create cinematic edits, engaging short-form content,
+                motion graphics and visual stories designed to capture
+                attention and leave an impact.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- CHANGE THIS IMAGE -->
+    <div class="hero-image">
+        <img
+            src="{{ asset('images/profile.png') }}"
+            alt="Nishaan Chakraborty"
+        >
+    </div>
+
+    <div class="scroll-indicator">
+        Scroll to explore ↓
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<section id="about">
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            01 / About
+        </div>
+
+        <h2 class="section-title reveal">
+            Turning footage<br>
+            into stories.
+        </h2>
+
+        <div class="about-grid">
+
+            <div class="about-text reveal">
+
+                <p>
+                    I'm <strong>Nishaan Chakraborty</strong>, a video editor
+                    passionate about transforming raw footage into
+                    visually engaging experiences.
+                </p>
+
+                <br>
+
+                <p>
+                    My focus is on storytelling, pacing, transitions,
+                    sound design, motion and cinematic visuals.
+                </p>
+
+            </div>
+
+            <!-- CHANGE THIS IMAGE -->
+            <div class="about-image reveal">
+
+                <img
+                    src= 'Nishaan.jpeg'
+                    alt="Nishaan Chakraborty"
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     PROJECTS
+========================= -->
+
+<section id="projects">
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            02 / Selected Work
+        </div>
+
+        <h2 class="section-title reveal">
+            My Projects
+        </h2>
+
+        <!-- FILTER -->
+
+        <div class="filter reveal">
+
+            <button class="active" data-filter="all">
+                All
+            </button>
+
+            <button data-filter="cinematic">
+                Cinematic
+            </button>
+
+            <button data-filter="short">
+                Short Form
+            </button>
+
+            <button data-filter="motion">
+                Motion Graphics
+            </button>
+
+            <button data-filter="color">
+                Color Grading
+            </button>
+
+        </div>
+
+
+        <!-- PROJECT GRID -->
+
+        <div class="projects">
+
+
+            <!-- PROJECT 1 -->
+
+            <article
+                class="project featured reveal"
+                data-category="cinematic"
+                data-video="{{ asset('videos/project1.mp4') }}"
+                data-title="Cinematic Project"
+            >
+
+                <div class="project-media">
+
+                    <video
+                        muted
+                        loop
+                        playsinline
+                        preload="metadata"
+                        poster="{{ asset('images/project1.jpg') }}"
+                    >
+                        <source
+                            src="{{ asset('videos/project1.mp4') }}"
+                            type="video/mp4"
+                        >
+                    </video>
+
+                    <div class="project-overlay">
+
+                        <div class="play">
+                            ▶
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="project-info">
+
+                    <h3>
+                        Cinematic Project
+                    </h3>
+
+                    <div class="project-meta">
+
+                        <span>
+                            Cinematic
+                        </span>
+
+                        <span>
+                            2026
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 2 -->
+
+            <article
+                class="project reveal"
+                data-category="short"
+                data-video="{{ asset('videos/project2.mp4') }}"
+                data-title="Short Form Edit"
+            >
+
+                <div class="project-media">
+
+                    <video
+                        muted
+                        loop
+                        playsinline
+                        preload="metadata"
+                        poster="{{ asset('images/project2.jpg') }}"
+                    >
+                        <source
+                            src="{{ asset('videos/project2.mp4') }}"
+                            type="video/mp4"
+                        >
+                    </video>
+
+                    <div class="project-overlay">
+
+                        <div class="play">
+                            ▶
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="project-info">
+
+                    <h3>
+                        Short Form Edit
+                    </h3>
+
+                    <div class="project-meta">
+
+                        <span>
+                            Reels
+                        </span>
+
+                        <span>
+                            2026
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 3 -->
+
+            <article
+                class="project reveal"
+                data-category="motion"
+                data-video="{{ asset('videos/project3.mp4') }}"
+                data-title="Motion Graphics"
+            >
+
+                <div class="project-media">
+
+                    <video
+                        muted
+                        loop
+                        playsinline
+                        preload="metadata"
+                        poster="{{ asset('images/project3.jpg') }}"
+                    >
+                        <source
+                            src="{{ asset('videos/project3.mp4') }}"
+                            type="video/mp4"
+                        >
+                    </video>
+
+                    <div class="project-overlay">
+
+                        <div class="play">
+                            ▶
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="project-info">
+
+                    <h3>
+                        Motion Graphics
+                    </h3>
+
+                    <div class="project-meta">
+
+                        <span>
+                            Motion
+                        </span>
+
+                        <span>
+                            2026
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FEATURED PROJECT
+========================= -->
+
+<section class="featured-work">
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            03 / Featured
+        </div>
+
+        <div class="featured-grid">
+
+            <div class="featured-video reveal">
+
+                <!-- CHANGE VIDEO -->
+                <video
+                    controls
+                    preload="metadata"
+                    poster="{{ asset('images/featured.jpg') }}"
+                >
+                    <source
+                        src="{{ asset('videos/featured.mp4') }}"
+                        type="video/mp4"
+                    >
+                </video>
+
+            </div>
+
+            <div class="featured-copy reveal">
+
+                <h3>
+                    The Art Of Editing
+                </h3>
+
+                <p>
+                    A showcase of pacing, cinematic transitions,
+                    sound design and visual storytelling.
+                </p>
+
+                <a href="#contact" class="outline-btn">
+                    Work With Me →
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SKILLS
+========================= -->
+
+<section id="skills">
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            04 / Expertise
+        </div>
+
+        <h2 class="section-title reveal">
+            What I Do
+        </h2>
+
+
+        <div class="skills-grid">
+
+            <div class="skill reveal">
+
+                <div class="skill-number">
+                    01
+                </div>
+
+                <h3>
+                    Video Editing
+                </h3>
+
+                <p>
+                    Professional editing focused on pacing,
+                    structure and storytelling.
+                </p>
+
+            </div>
+
+
+            <div class="skill reveal">
+
+                <div class="skill-number">
+                    02
+                </div>
+
+                <h3>
+                    Cinematic Editing
+                </h3>
+
+                <p>
+                    Creating cinematic visuals with rhythm,
+                    composition and atmosphere.
+                </p>
+
+            </div>
+
+
+            <div class="skill reveal">
+
+                <div class="skill-number">
+                    03
+                </div>
+
+                <h3>
+                    Motion Graphics
+                </h3>
+
+                <p>
+                    Dynamic titles, transitions and motion-based
+                    visual elements.
+                </p>
+
+            </div>
+
+
+            <div class="skill reveal">
+
+                <div class="skill-number">
+                    04
+                </div>
+
+                <h3>
+                    Color Grading
+                </h3>
+
+                <p>
+                    Developing visual mood through color,
+                    contrast and cinematic grading.
+                </p>
+
+            </div>
+
+
+            <div class="skill reveal">
+
+                <div class="skill-number">
+                    05
+                </div>
+
+                <h3>
+                    Sound Design
+                </h3>
+
+                <p>
+                    Sound effects, music synchronization
+                    and audio enhancement.
+                </p>
+
+            </div>
+
+
+            <div class="skill reveal">
+
+                <div class="skill-number">
+                    06
+                </div>
+
+                <h3>
+                    Storytelling
+                </h3>
+
+                <p>
+                    Turning individual clips into a coherent
+                    visual narrative.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SOFTWARE
+========================= -->
+
+<section>
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            05 / Tools
+        </div>
+
+        <h2 class="section-title reveal">
+            Software
+        </h2>
+
+        <div class="software-list">
+
+            <div class="software reveal">
+                <span>Adobe Premiere Pro</span>
+            </div>
+
+            <div class="software reveal">
+                <span>Adobe After Effects</span>
+            </div>
+
+            <div class="software reveal">
+                <span>DaVinci Resolve</span>
+            </div>
+
+            <div class="software reveal">
+                <span>Adobe Photoshop</span>
+            </div>
+
+            <div class="software reveal">
+                <span>Adobe Illustrator</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CONTACT
+========================= -->
+
+<section class="contact" id="contact">
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            06 / Contact
+        </div>
+
+        <h2 class="contact-title reveal">
+            Let's create<br>
+            something great.
+        </h2>
+
+        <p class="contact-subtitle reveal">
+            Have a project in mind? Let's bring your vision to life.
+        </p>
+
+        <!-- CHANGE EMAIL -->
+        <a
+            href="mailto:your@email.com"
+            class="contact-button reveal"
+        >
+            Get In Touch →
+        </a>
+
+        <div class="socials reveal">
+
+            <!-- CHANGE THESE LINKS -->
+
+            <a href="#" target="_blank">
+                Instagram
+            </a>
+
+            <a href="#" target="_blank">
+                YouTube
+            </a>
+
+            <a href="#" target="_blank">
+                LinkedIn
+            </a>
+
+            <a href="#" target="_blank">
+                WhatsApp
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div class="container footer-inner">
+
+        <span>
+            © 2026 Nishaan Chakraborty
+        </span>
+
+        <span>
+            Video Editor / Visual Storyteller
+        </span>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================
+     VIDEO MODAL
+========================= -->
+
+<div class="video-modal" id="videoModal">
+
+    <div class="modal-content">
+
+        <button class="close-modal" id="closeModal">
+            ×
+        </button>
+
+        <video
+            id="modalVideo"
+            controls
+            playsinline
+        ></video>
+
+        <div class="modal-title" id="modalTitle"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =========================
+       NAVBAR
+    ========================= */
+
+    const navbar = document.getElementById("navbar");
+
+    window.addEventListener("scroll", () => {
+
+        if (window.scrollY > 50) {
+            navbar.classList.add("scrolled");
+        } else {
+            navbar.classList.remove("scrolled");
+        }
+
+    });
+
+
+    /* =========================
+       SCROLL REVEAL
+    ========================= */
+
+    const revealElements =
+        document.querySelectorAll(".reveal");
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("active");
+
+                    observer.unobserve(entry.target);
+
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.12
+        }
+    );
+
+    revealElements.forEach(element => {
+        observer.observe(element);
+    });
+
+
+    /* =========================
+       PROJECT FILTER
+    ========================= */
+
+    const filterButtons =
+        document.querySelectorAll(".filter button");
+
+    const projects =
+        document.querySelectorAll(".project");
+
+    filterButtons.forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            filterButtons.forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            const filter =
+                button.dataset.filter;
+
+            projects.forEach(project => {
+
+                const category =
+                    project.dataset.category;
+
+                if (
+                    filter === "all" ||
+                    category === filter
+                ) {
+
+                    project.style.display = "";
+
+                    setTimeout(() => {
+                        project.style.opacity = "1";
+                        project.style.transform =
+                            "translateY(0)";
+                    }, 50);
+
+                } else {
+
+                    project.style.opacity = "0";
+                    project.style.transform =
+                        "translateY(20px)";
+
+                    setTimeout(() => {
+                        project.style.display = "none";
+                    }, 300);
+
+                }
+
+            });
+
+        });
+
+    });
+
+
+    /* =========================
+       PROJECT VIDEO PREVIEW
+    ========================= */
+
+    projects.forEach(project => {
+
+        const video =
+            project.querySelector("video");
+
+        if (!video) return;
+
+        project.addEventListener("mouseenter", () => {
+
+            video.play().catch(() => {});
+
+        });
+
+        project.addEventListener("mouseleave", () => {
+
+            video.pause();
+
+            video.currentTime = 0;
+
+        });
+
+    });
+
+
+    /* =========================
+       VIDEO MODAL
+    ========================= */
+
+    const modal =
+        document.getElementById("videoModal");
+
+    const modalVideo =
+        document.getElementById("modalVideo");
+
+    const modalTitle =
+        document.getElementById("modalTitle");
+
+    const closeModal =
+        document.getElementById("closeModal");
+
+
+    projects.forEach(project => {
+
+        project.addEventListener("click", () => {
+
+            const videoURL =
+                project.dataset.video;
+
+            const title =
+                project.dataset.title;
+
+            modalVideo.src = videoURL;
+
+            modalTitle.textContent = title;
+
+            modal.classList.add("active");
+
+            document.body.style.overflow = "hidden";
+
+            modalVideo.play().catch(() => {});
+
+        });
+
+    });
+
+
+    function closeVideoModal() {
+
+        modal.classList.remove("active");
+
+        modalVideo.pause();
+
+        modalVideo.removeAttribute("src");
+
+        modalVideo.load();
+
+        document.body.style.overflow = "";
+
+    }
+
+
+    closeModal.addEventListener(
+        "click",
+        closeVideoModal
+    );
+
+
+    modal.addEventListener("click", (event) => {
+
+        if (event.target === modal) {
+            closeVideoModal();
+        }
+
+    });
+
+
+    document.addEventListener("keydown", (event) => {
+
+        if (event.key === "Escape") {
+            closeVideoModal();
+        }
+
+    });
+
+
+    /* =========================
+       SIMPLE PARALLAX
+    ========================= */
+
+    const heroImage =
+        document.querySelector(".hero-image");
+
+    window.addEventListener("scroll", () => {
+
+        if (!heroImage) return;
+
+        const scroll =
+            window.scrollY;
+
+        if (scroll < window.innerHeight) {
+
+            heroImage.style.transform =
+                `translateY(${scroll * 0.12}px)`;
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
